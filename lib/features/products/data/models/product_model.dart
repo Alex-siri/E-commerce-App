@@ -1,5 +1,4 @@
-import '../../../auth/domain/entities/product.dart';
-
+import '../../domain/entities/product.dart';
 class ProductModel extends Product {
   const ProductModel({
     required super.id,
