@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => CartCubit()),
       ],
       child: MaterialApp(
-        title: 'Fake Store E-Commerce',
+        title: 'Merkato shopping app',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
@@ -89,7 +89,4 @@ class MyApp extends StatelessWidget {
 
 
 // Username: mor_2314
-
-// Password: 83r5^_// Username: mor_2314
-
 // Password: 83r5^_
