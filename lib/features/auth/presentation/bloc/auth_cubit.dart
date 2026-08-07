@@ -1,13 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/login_user.dart';
+import '../../domain/usecases/signup_user.dart';
+import '../../domain/usecases/update_profile_pic.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  // We bring in our Use Case from the Domain layer
+  // We bring in our Use Cases from the Domain layer
   final LoginUser loginUser;
+  final SignUpUser signUpUser;
+  final UpdateProfilePic updateProfilePic;
 
   // We start the Cubit with the 'AuthInitial' state
-  AuthCubit({required this.loginUser}) : super(AuthInitial());
+  AuthCubit({
+    required this.loginUser, 
+    required this.signUpUser, 
+    required this.updateProfilePic
+  }) : super(AuthInitial());
 
   // This is the function our UI will call when the login button is pressed
   Future<void> login(String email, String password) async {
@@ -23,6 +31,57 @@ class AuthCubit extends Cubit<AuthState> {
    } catch (e) {
       // We are replacing our custom message with the actual system error
       emit(AuthError(e.toString()));
+    }
+  }
+
+  // The Sign Up Method
+  Future<void> signUp(
+    String email, 
+    String password, {
+    String? firstName,
+    String? lastName,
+    String? address,
+    String? postalCode,
+    String? phoneNumber,
+    String? profilePic,
+  }) async {
+    emit(AuthLoading()); // Triggers the loading spinner on your UI
+    
+    try {
+      // Execute the genuine Use Case
+      final user = await signUpUser(
+        email, 
+        password,
+        firstName: firstName,
+        lastName: lastName,
+        address: address,
+        postalCode: postalCode,
+        phoneNumber: phoneNumber,
+        profilePic: profilePic,
+      );
+      
+      emit(AuthAuthenticated(user)); 
+    } catch (e) {
+      emit(AuthError('Failed to create account. Please try again.'));
+    }
+  }
+
+  // 2. The Logout Method
+  void logout() {
+    // Reset the state back to the initial starting point
+    emit(AuthInitial()); 
+  }
+
+  // Update Profile Picture
+  Future<void> updateProfilePicture(String imagePath) async {
+    if (state is AuthAuthenticated) {
+      try {
+        final currentUser = (state as AuthAuthenticated).user;
+        final updatedUser = await updateProfilePic(currentUser.email, imagePath);
+        emit(AuthAuthenticated(updatedUser));
+      } catch (e) {
+        // Just silently fail or show error
+      }
     }
   }
 }

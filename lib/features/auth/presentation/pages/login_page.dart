@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/auth_cubit.dart';
@@ -12,98 +13,290 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // Controllers to read the text typed by the user
-  final _usernameController = TextEditingController();
+  final _usernameController = TextEditingController(); // acts as email
   final _passwordController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _postalCodeController = TextEditingController();
+  final _phoneController = TextEditingController();
+  
+  // This boolean toggles the UI between Login and Sign Up mode
+  bool _isLoginMode = true;
 
   @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _addressController.dispose();
+    _postalCodeController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Fake Store Login'),
-        centerTitle: true,
-      ),
-      // BlocConsumer listens to our AuthCubit
-      body: BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
-          // If the Cubit broadcasts success, show a popup and (eventually) navigate
-          if (state is AuthAuthenticated) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Login Successful!')),
-            );
-          
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const HomePage()),
-            );
-          } 
-          // If the Cubit broadcasts an error, show a red error popup
-          else if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: Colors.red),
-            );
-          }
-        },
-        builder: (context, state) {
-          // If the Cubit is loading, show a spinner in the center of the screen
-          if (state is AuthLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          // Otherwise, show the login form
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                    prefixIcon: Icon(Icons.person),
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(),
-                  ),
-                  obscureText: true, // Hides the password characters
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity, // Makes the button full-width
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final username = _usernameController.text;
-                      final password = _passwordController.text;
-                      
-                      // When pressed, we pass the text to our Cubit to start the login process!
-                      if (username.isNotEmpty && password.isNotEmpty) {
-                        context.read<AuthCubit>().login(username, password);
-                      }
-                    },
-                    child: const Text(
-                      'LOGIN',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      backgroundColor: const Color(0xFF121212), // Dark background
+      body: Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF121212),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 48),
+              child: BlocConsumer<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if (state is AuthAuthenticated) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(_isLoginMode ? 'Login Successful!' : 'Account Created!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    );
+                  } else if (state is AuthError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.message), backgroundColor: Colors.redAccent),
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  return Card(
+                    color: const Color(0xFF1E1E1E), // Dark card surface
+                    elevation: 20, 
+                    shadowColor: Colors.black87,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), 
+                    child: Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            child: Icon(
+                              _isLoginMode ? Icons.storefront_rounded : Icons.person_add_alt_1_rounded, 
+                              key: ValueKey<bool>(_isLoginMode),
+                              size: 72, 
+                              color: const Color(0xFFFFD700) // Gold
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            child: Text(
+                              _isLoginMode ? 'Welcome Back 👋' : 'Create Account ✨',
+                              key: ValueKey<bool>(_isLoginMode),
+                              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            child: Text(
+                              _isLoginMode ? 'Sign in to access your Fake Store' : 'Join the Fake Store today',
+                              key: ValueKey<bool>(_isLoginMode),
+                              style: const TextStyle(color: Colors.white70, fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          
+                          // Username / Email Field
+                          TextField(
+                            controller: _usernameController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              labelText: 'Email Address',
+                              filled: true,
+                              fillColor: Colors.grey.shade50,
+                              prefixIcon: const Icon(Icons.email_outlined, color: Color(0xFF4A00E0)),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: const BorderSide(color: Color(0xFF4A00E0), width: 1.5),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          
+                          // Additional Fields for Sign Up Mode only
+                          if (!_isLoginMode) ...[
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _firstNameController,
+                                    decoration: InputDecoration(
+                                      labelText: 'First Name',
+                                      filled: true,
+                                      fillColor: Colors.grey.shade50,
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: TextField(
+                                    controller: _lastNameController,
+                                    decoration: InputDecoration(
+                                      labelText: 'Last Name',
+                                      filled: true,
+                                      fillColor: Colors.grey.shade50,
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            TextField(
+                              controller: _addressController,
+                              decoration: InputDecoration(
+                                labelText: 'Address',
+                                filled: true,
+                                fillColor: Colors.grey.shade50,
+                                prefixIcon: const Icon(Icons.location_on_outlined, color: Color(0xFF4A00E0)),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextField(
+                              controller: _postalCodeController,
+                              decoration: InputDecoration(
+                                labelText: 'Postal Code',
+                                filled: true,
+                                fillColor: Colors.grey.shade50,
+                                prefixIcon: const Icon(Icons.markunread_mailbox_outlined, color: Color(0xFF4A00E0)),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                              ),
+                            ),
+                            TextField(
+                              controller: _phoneController,
+                              keyboardType: TextInputType.phone,
+                              decoration: InputDecoration(
+                                labelText: 'Phone Number',
+                                filled: true,
+                                fillColor: Colors.grey.shade50,
+                                prefixIcon: const Icon(Icons.phone_outlined, color: Color(0xFF4A00E0)),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                          
+                          // Password Field
+                          TextField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              filled: true,
+                              fillColor: Colors.grey.shade50,
+                              prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF4A00E0)),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: const BorderSide(color: Color(0xFF4A00E0), width: 1.5),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          
+                          // Main Action Button
+                          Container(
+                            width: double.infinity,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: const Color(0xFFFFD700), // Solid Gold
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFFFFD700).withOpacity(0.3),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              ),
+                              onPressed: state is AuthLoading ? null : () {
+                                final username = _usernameController.text;
+                                final password = _passwordController.text;
+                                
+                                if (username.isNotEmpty && password.isNotEmpty) {
+                                  if (_isLoginMode) {
+                                    context.read<AuthCubit>().login(username, password);
+                                  } else {
+                                   context.read<AuthCubit>().signUp(
+                                     username, 
+                                     password,
+                                     firstName: _firstNameController.text,
+                                     lastName: _lastNameController.text,
+                                     address: _addressController.text,
+                                     postalCode: _postalCodeController.text,
+                                     phoneNumber: _phoneController.text,
+                                   );
+                                  }
+                                }
+                              },
+                              child: state is AuthLoading
+                                  ? const CircularProgressIndicator(color: Colors.white)
+                                  : Text(
+                                      _isLoginMode ? 'LOG IN' : 'SIGN UP',
+                                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87, letterSpacing: 1.2),
+                                    ),
+                            ),
+                          ),
+                          
+                          const SizedBox(height: 24),
+                          // The Toggle Button
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _isLoginMode = !_isLoginMode;
+                              });
+                            },
+                            child: Text(
+                              _isLoginMode 
+                                ? "Don't have an account? Sign Up" 
+                                : "Already have an account? Login",
+                              style: const TextStyle(color: Color(0xFFFFD700), fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  );
+                },
+              ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

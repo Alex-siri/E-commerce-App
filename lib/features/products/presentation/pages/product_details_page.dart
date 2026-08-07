@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../cart/presentation/bloc/cart_cubit.dart';
 import '../../domain/entities/product.dart'; // Adjust this import path if your Product entity is elsewhere!
+import '../bloc/currency_cubit.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   final Product product;
@@ -45,9 +46,13 @@ class ProductDetailsPage extends StatelessWidget {
                           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Text(
-                        '\$${product.price.toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+                      BlocBuilder<CurrencyCubit, AppCurrency>(
+                        builder: (context, currency) {
+                          return Text(
+                            context.read<CurrencyCubit>().formatPrice(product.price),
+                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+                          );
+                        },
                       ),
                     ],
                   ),

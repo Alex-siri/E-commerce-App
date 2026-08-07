@@ -4,16 +4,25 @@ class User extends Equatable {
   final int id;
   final String email;
   final String username;
-  
-  // We can add a name class if we want to parse the nested firstname/lastname
-  // from the FakeStore API, but for now we'll stick to the basics.
+  final String? firstName;
+  final String? lastName;
+  final String? address;
+  final String? postalCode;
+  final String? phoneNumber;
+  final String? profilePic;
 
   const User({
     required this.id,
     required this.email,
     required this.username,
+    this.firstName,
+    this.lastName,
+    this.address,
+    this.postalCode,
+    this.phoneNumber,
+    this.profilePic,
   });
 
   @override
-  List<Object?> get props => [id, email, username];
+  List<Object?> get props => [id, email, username, firstName, lastName, address, postalCode, phoneNumber, profilePic];
 }
