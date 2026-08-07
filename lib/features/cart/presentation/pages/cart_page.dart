@@ -34,7 +34,7 @@ class CartPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFD700),
+                      backgroundColor: Colors.redAccent,
                       foregroundColor: Colors.black87,
                     ),
                     onPressed: () => Navigator.pop(context),
@@ -62,7 +62,7 @@ class CartPage extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
-                        side: BorderSide(color: const Color(0xFFFFD700).withOpacity(0.2)),
+                        side: BorderSide(color: Colors.redAccent.withOpacity(0.2)),
                       ),
                      child: ListTile(
                         leading: Container(
@@ -83,7 +83,7 @@ class CartPage extends StatelessWidget {
                         ),
                         subtitle: Text(
                           currencyCubit.formatPrice(item.product.price),
-                          style: const TextStyle(color: Color(0xFFFFD700), fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
                         ),
                         trailing: IconButton(
                           icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent),
@@ -125,12 +125,12 @@ class CartPage extends StatelessWidget {
                         currencyCubit.formatPrice(
                           state.items.fold(0.0, (total, item) => total + (item.product.price * item.quantity)),
                         ), 
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFFFFD700)),
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.redAccent),
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                          backgroundColor: const Color(0xFFFFD700),
+                          backgroundColor: Colors.redAccent,
                           foregroundColor: Colors.black87,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),

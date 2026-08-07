@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import '../bloc/auth_cubit.dart';
 import '../bloc/auth_state.dart';
 import 'login_page.dart';
+import 'edit_profile_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -13,13 +14,13 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
+      backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
         title: const Text('My Profile'),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: Colors.black87,
+        foregroundColor: Colors.white,
       ),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
@@ -53,17 +54,17 @@ class ProfilePage extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 60,
-                              backgroundColor: const Color(0xFFFFD700).withOpacity(0.2),
+                              backgroundColor: Colors.redAccent.withOpacity(0.2),
                               backgroundImage: user.profilePic != null && user.profilePic!.isNotEmpty
                                   ? (kIsWeb ? NetworkImage(user.profilePic!) : FileImage(File(user.profilePic!))) as ImageProvider
                                   : null,
                               child: user.profilePic == null || user.profilePic!.isEmpty
-                                  ? const Icon(Icons.person, size: 60, color: Color(0xFFFFD700))
+                                  ? const Icon(Icons.person, size: 60, color: Colors.redAccent)
                                   : null,
                             ),
                             Container(
                               decoration: const BoxDecoration(
-                                color: Color(0xFFFFD700),
+                                color: Colors.redAccent,
                                 shape: BoxShape.circle,
                               ),
                               padding: const EdgeInsets.all(8),
@@ -75,11 +76,13 @@ class ProfilePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      user.username.toUpperCase(),
+                      (user.firstName != null && user.firstName!.isNotEmpty) 
+                          ? '${user.firstName} ${user.lastName ?? ''}'.trim().toUpperCase()
+                          : user.username.toUpperCase(),
                       style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFFFFD700),
+                        color: Colors.redAccent,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -93,7 +96,7 @@ class ProfilePage extends StatelessWidget {
                     const SizedBox(height: 48),
                     _buildInfoCard(Icons.email_outlined, 'Email', user.email),
                     const SizedBox(height: 16),
-                    _buildInfoCard(Icons.badge_outlined, 'User Name', user.username),
+                    _buildInfoCard(Icons.badge_outlined, 'Username', user.username),
                     const SizedBox(height: 16),
                     if (user.firstName != null && user.firstName!.isNotEmpty) ...[
                       _buildInfoCard(Icons.person_outline, 'Full Name', '${user.firstName} ${user.lastName ?? ''}'),
@@ -111,34 +114,59 @@ class ProfilePage extends StatelessWidget {
                       _buildInfoCard(Icons.phone_outlined, 'Phone Number', user.phoneNumber!),
                       const SizedBox(height: 16),
                     ],
-                    SizedBox(
-                      width: double.infinity,
-                      height: 55,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E1E1E),
-                          foregroundColor: const Color(0xFFFFD700),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: const BorderSide(color: Color(0xFFFFD700), width: 1.5),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 55,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => EditProfilePage(user: user)),
+                            );
+                          },
+                          icon: const Icon(Icons.edit),
+                          label: const Text(
+                            'EDIT PROFILE',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        onPressed: () {
-                          context.read<AuthCubit>().logout();
-                        },
-                        icon: const Icon(Icons.logout),
-                        label: const Text(
-                          'LOG OUT',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 55,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1E1E1E),
+                            foregroundColor: Colors.redAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: const BorderSide(color: Colors.redAccent, width: 1.5),
+                            ),
+                          ),
+                          onPressed: () {
+                            context.read<AuthCubit>().logout();
+                          },
+                          icon: const Icon(Icons.logout),
+                          label: const Text(
+                            'Log out',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
-          return const Center(child: CircularProgressIndicator(color: Color(0xFFFFD700)));
+              );
+            }
+          return const Center(child: CircularProgressIndicator(color: Colors.redAccent));
         },
       ),
     );
@@ -150,7 +178,7 @@ class ProfilePage extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFFFD700).withOpacity(0.3)),
+        border: Border.all(color: Colors.redAccent.withOpacity(0.3)),
         boxShadow: [
           BoxShadow(
             color: Colors.black45.withOpacity(0.1),
@@ -164,10 +192,10 @@ class ProfilePage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFD700).withOpacity(0.1),
+              color: Colors.redAccent.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: const Color(0xFFFFD700), size: 24),
+            child: Icon(icon, color: Colors.redAccent, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(

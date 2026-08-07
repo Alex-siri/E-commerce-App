@@ -48,7 +48,6 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Checkout'),
         backgroundColor: const Color(0xFF121212),
         title: const Text('Checkout', style: TextStyle(color: Colors.white)),
         centerTitle: true,
@@ -64,9 +63,9 @@ class _PaymentPageState extends State<PaymentPage> {
               decoration: BoxDecoration(
                 color: const Color(0xFF1E1E1E), // Darker surface
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFFFD700).withOpacity(0.5)),
+                border: Border.all(color: Colors.redAccent.withOpacity(0.5)),
                 boxShadow: [
-                  BoxShadow(color: const Color(0xFFFFD700).withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 5)),
+                  BoxShadow(color: Colors.redAccent.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 5)),
                 ],
               ),
               child: Column(
@@ -76,7 +75,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   const SizedBox(height: 8),
                   Text(
                     widget.totalAmount,
-                    style: const TextStyle(color: Color(0xFFFFD700), fontSize: 32, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Colors.redAccent, fontSize: 32, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -97,11 +96,11 @@ class _PaymentPageState extends State<PaymentPage> {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.credit_card, color: Color(0xFFFFD700), size: 28),
+                      const Icon(Icons.credit_card, color: Colors.redAccent, size: 28),
                       const SizedBox(width: 12),
                       const Text('Credit / Debit Card', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
                       const Spacer(),
-                      const Icon(Icons.check_circle, color: Color(0xFFFFD700)),
+                      const Icon(Icons.check_circle, color: Colors.redAccent),
                     ],
                   ),
                   const Divider(height: 32, color: Colors.white10),
@@ -113,7 +112,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       hintText: '0000 0000 0000 0000',
                       hintStyle: TextStyle(color: Colors.white24),
                       border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFFFFD700))),
+                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.redAccent)),
                     ),
                     keyboardType: TextInputType.number,
                   ),
@@ -125,7 +124,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             labelText: 'Expiry Date', labelStyle: TextStyle(color: Colors.white54), hintText: 'MM/YY', hintStyle: TextStyle(color: Colors.white24), border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFFFFD700))),
+                            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.redAccent)),
                           ),
                         ),
                       ),
@@ -135,7 +134,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
                             labelText: 'CVV', labelStyle: TextStyle(color: Colors.white54), hintText: '123', hintStyle: TextStyle(color: Colors.white24), border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFFFFD700))),
+                            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.redAccent)),
                           ),
                           obscureText: true,
                         ),
@@ -149,7 +148,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       labelText: 'Cardholder Name',
                       labelStyle: TextStyle(color: Colors.white54),
                       border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFFFFD700))),
+                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.redAccent)),
                     ),
                   ),
                 ],
@@ -163,7 +162,7 @@ class _PaymentPageState extends State<PaymentPage> {
               height: 55,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFFD700), // Gold button
+                  backgroundColor: Colors.redAccent, // Gold button
                   foregroundColor: Colors.black87,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),

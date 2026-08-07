@@ -116,4 +116,22 @@ class AuthRepositoryImpl implements AuthRepository {
       profilePic: profilePicPath,
     );
   }
+
+  @override
+  Future<User> updateProfile(User updatedUser) async {
+    final email = updatedUser.email;
+    final localUserJson = sharedPreferences.getString('user_$email');
+    if (localUserJson == null) throw Exception('User not found in local storage.');
+
+    final localData = jsonDecode(localUserJson);
+    localData['firstName'] = updatedUser.firstName;
+    localData['lastName'] = updatedUser.lastName;
+    localData['address'] = updatedUser.address;
+    localData['postalCode'] = updatedUser.postalCode;
+    localData['phoneNumber'] = updatedUser.phoneNumber;
+    
+    await sharedPreferences.setString('user_$email', jsonEncode(localData));
+
+    return updatedUser;
+  }
 }

@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                               _isLoginMode ? Icons.storefront_rounded : Icons.person_add_alt_1_rounded, 
                               key: ValueKey<bool>(_isLoginMode),
                               size: 72, 
-                              color: const Color(0xFFFFD700) // Gold
+                              color: Colors.redAccent // Red
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -112,11 +112,13 @@ class _LoginPageState extends State<LoginPage> {
                           TextField(
                             controller: _usernameController,
                             keyboardType: TextInputType.emailAddress,
+                            style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               labelText: 'Email Address',
+                              labelStyle: const TextStyle(color: Colors.white54),
                               filled: true,
-                              fillColor: Colors.grey.shade50,
-                              prefixIcon: const Icon(Icons.email_outlined, color: Color(0xFF4A00E0)),
+                              fillColor: const Color(0xFF2A2A2A),
+                              prefixIcon: const Icon(Icons.email_outlined, color: Colors.redAccent),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide: BorderSide.none,
@@ -127,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
-                                borderSide: const BorderSide(color: Color(0xFF4A00E0), width: 1.5),
+                                borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
                               ),
                             ),
                           ),
@@ -140,11 +142,14 @@ class _LoginPageState extends State<LoginPage> {
                                 Expanded(
                                   child: TextField(
                                     controller: _firstNameController,
+                                    style: const TextStyle(color: Colors.white),
                                     decoration: InputDecoration(
                                       labelText: 'First Name',
+                                      labelStyle: const TextStyle(color: Colors.white54),
                                       filled: true,
-                                      fillColor: Colors.grey.shade50,
+                                      fillColor: const Color(0xFF2A2A2A),
                                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.redAccent, width: 1.5)),
                                     ),
                                   ),
                                 ),
@@ -152,11 +157,14 @@ class _LoginPageState extends State<LoginPage> {
                                 Expanded(
                                   child: TextField(
                                     controller: _lastNameController,
+                                    style: const TextStyle(color: Colors.white),
                                     decoration: InputDecoration(
                                       labelText: 'Last Name',
+                                      labelStyle: const TextStyle(color: Colors.white54),
                                       filled: true,
-                                      fillColor: Colors.grey.shade50,
+                                      fillColor: const Color(0xFF2A2A2A),
                                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.redAccent, width: 1.5)),
                                     ),
                                   ),
                                 ),
@@ -165,34 +173,44 @@ class _LoginPageState extends State<LoginPage> {
                             const SizedBox(height: 16),
                             TextField(
                               controller: _addressController,
+                              style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 labelText: 'Address',
+                                labelStyle: const TextStyle(color: Colors.white54),
                                 filled: true,
-                                fillColor: Colors.grey.shade50,
-                                prefixIcon: const Icon(Icons.location_on_outlined, color: Color(0xFF4A00E0)),
+                                fillColor: const Color(0xFF2A2A2A),
+                                prefixIcon: const Icon(Icons.location_on_outlined, color: Colors.redAccent),
                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.redAccent, width: 1.5)),
                               ),
                             ),
                             const SizedBox(height: 16),
                             TextField(
                               controller: _postalCodeController,
+                              style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 labelText: 'Postal Code',
+                                labelStyle: const TextStyle(color: Colors.white54),
                                 filled: true,
-                                fillColor: Colors.grey.shade50,
-                                prefixIcon: const Icon(Icons.markunread_mailbox_outlined, color: Color(0xFF4A00E0)),
+                                fillColor: const Color(0xFF2A2A2A),
+                                prefixIcon: const Icon(Icons.markunread_mailbox_outlined, color: Colors.redAccent),
                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.redAccent, width: 1.5)),
                               ),
                             ),
+                            const SizedBox(height: 16),
                             TextField(
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
+                              style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                 labelText: 'Phone Number',
+                                labelStyle: const TextStyle(color: Colors.white54),
                                 filled: true,
-                                fillColor: Colors.grey.shade50,
-                                prefixIcon: const Icon(Icons.phone_outlined, color: Color(0xFF4A00E0)),
+                                fillColor: const Color(0xFF2A2A2A),
+                                prefixIcon: const Icon(Icons.phone_outlined, color: Colors.redAccent),
                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.redAccent, width: 1.5)),
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -202,11 +220,13 @@ class _LoginPageState extends State<LoginPage> {
                           TextField(
                             controller: _passwordController,
                             obscureText: true,
+                            style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
                               labelText: 'Password',
+                              labelStyle: const TextStyle(color: Colors.white54),
                               filled: true,
-                              fillColor: Colors.grey.shade50,
-                              prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF4A00E0)),
+                              fillColor: const Color(0xFF2A2A2A),
+                              prefixIcon: const Icon(Icons.lock_outline, color: Colors.redAccent),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide: BorderSide.none,
@@ -217,7 +237,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
-                                borderSide: const BorderSide(color: Color(0xFF4A00E0), width: 1.5),
+                                borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
                               ),
                             ),
                           ),
@@ -229,10 +249,10 @@ class _LoginPageState extends State<LoginPage> {
                             height: 60,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
-                              color: const Color(0xFFFFD700), // Solid Gold
+                              color: Colors.redAccent, // Solid Red
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFFFFD700).withOpacity(0.3),
+                                  color: Colors.redAccent.withOpacity(0.3),
                                   blurRadius: 10,
                                   offset: const Offset(0, 5),
                                 ),
@@ -245,30 +265,57 @@ class _LoginPageState extends State<LoginPage> {
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                               ),
                               onPressed: state is AuthLoading ? null : () {
-                                final username = _usernameController.text;
-                                final password = _passwordController.text;
+                                final username = _usernameController.text.trim().toLowerCase();
+                                final password = _passwordController.text.trim();
                                 
-                                if (username.isNotEmpty && password.isNotEmpty) {
-                                  if (_isLoginMode) {
-                                    context.read<AuthCubit>().login(username, password);
-                                  } else {
-                                   context.read<AuthCubit>().signUp(
-                                     username, 
-                                     password,
-                                     firstName: _firstNameController.text,
-                                     lastName: _lastNameController.text,
-                                     address: _addressController.text,
-                                     postalCode: _postalCodeController.text,
-                                     phoneNumber: _phoneController.text,
-                                   );
+                                // Basic validations
+                                if (username.isEmpty || password.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Email and Password cannot be empty'), backgroundColor: Colors.redAccent));
+                                  return;
+                                }
+
+                                final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                                if (!emailRegex.hasMatch(username)) {
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter a valid email address'), backgroundColor: Colors.redAccent));
+                                  return;
+                                }
+                                
+                                if (!_isLoginMode) {
+                                  final firstName = _firstNameController.text.trim();
+                                  final lastName = _lastNameController.text.trim();
+                                  final address = _addressController.text.trim();
+                                  final postalCode = _postalCodeController.text.trim();
+                                  final phone = _phoneController.text.trim();
+                                  
+                                  if (firstName.isEmpty || lastName.isEmpty || address.isEmpty || postalCode.isEmpty || phone.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('All fields must be filled to sign up'), backgroundColor: Colors.redAccent));
+                                    return;
                                   }
+
+                                  final phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
+                                  if (!phoneRegex.hasMatch(phone)) {
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter a valid phone number'), backgroundColor: Colors.redAccent));
+                                    return;
+                                  }
+
+                                  context.read<AuthCubit>().signUp(
+                                    username, 
+                                    password,
+                                    firstName: firstName,
+                                    lastName: lastName,
+                                    address: address,
+                                    postalCode: postalCode,
+                                    phoneNumber: phone,
+                                  );
+                                } else {
+                                  context.read<AuthCubit>().login(username, password);
                                 }
                               },
                               child: state is AuthLoading
                                   ? const CircularProgressIndicator(color: Colors.white)
                                   : Text(
                                       _isLoginMode ? 'LOG IN' : 'SIGN UP',
-                                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87, letterSpacing: 1.2),
+                                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1.2),
                                     ),
                             ),
                           ),
@@ -285,7 +332,7 @@ class _LoginPageState extends State<LoginPage> {
                               _isLoginMode 
                                 ? "Don't have an account? Sign Up" 
                                 : "Already have an account? Login",
-                              style: const TextStyle(color: Color(0xFFFFD700), fontWeight: FontWeight.bold),
+                              style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],

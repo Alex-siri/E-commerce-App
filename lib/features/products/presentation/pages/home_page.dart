@@ -13,6 +13,10 @@ import '../../../cart/presentation/bloc/cart_cubit.dart';
 import '../../../cart/presentation/bloc/cart_state.dart';
 import '../../../cart/presentation/pages/cart_page.dart';
 
+// Favorites Imports
+import '../../../favorites/presentation/bloc/favorite_cubit.dart';
+import '../../../favorites/presentation/pages/favorites_page.dart';
+
 // Profile Imports
 import '../../../../features/auth/presentation/pages/profile_page.dart';
 
@@ -41,14 +45,17 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(
             color: const Color(0xFF1E1E1E), // Darker shade than black
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: const Color(0xFFFFD700).withOpacity(0.5), width: 1.5),
+            border: Border.all(color: Colors.redAccent.withOpacity(0.5), width: 1.5),
           ),
-          child: const TextField(
-            style: TextStyle(color: Colors.white),
-            decoration: InputDecoration(
+          child: TextField(
+            style: const TextStyle(color: Colors.white),
+            onChanged: (value) {
+              context.read<ProductCubit>().searchProducts(value);
+            },
+            decoration: const InputDecoration(
               hintText: 'Search products...',
               hintStyle: TextStyle(fontSize: 14, color: Colors.white54),
-              prefixIcon: Icon(Icons.search, color: Color(0xFFFFD700)),
+              prefixIcon: Icon(Icons.search, color: Colors.redAccent),
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(vertical: 10),
             ),
@@ -61,16 +68,59 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   context.read<CurrencyCubit>().toggleCurrency();
                 },
-                icon: const Icon(Icons.language, size: 18, color: Color(0xFFFFD700)),
+                icon: const Icon(Icons.language, size: 18, color: Colors.redAccent),
                 label: Text(
                   currency == AppCurrency.usd ? 'USD' : 'ETB',
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFFFD700)),
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent),
                 ),
               );
             },
           ),
+          BlocBuilder<FavoriteCubit, FavoriteState>(
+            builder: (context, favState) {
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.favorite_border, color: Colors.redAccent),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const FavoritesPage()),
+                      );
+                    },
+                  ),
+                  if (favState.items.isNotEmpty)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          '${favState.items.length}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            }
+          ),
           IconButton(
-            icon: const Icon(Icons.person_outline),
+            icon: const Icon(Icons.person_outline, color: Colors.white),
             onPressed: () {
               Navigator.push(
                 context,
@@ -101,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         padding: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFD700),
+                          color: Colors.redAccent,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         constraints: const BoxConstraints(
@@ -132,19 +182,23 @@ class _HomePageState extends State<HomePage> {
             decoration: const BoxDecoration(
               border: Border(bottom: BorderSide(color: Colors.white10)),
             ),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                _buildCategoryItem('Choice', isGold: true),
-                _buildCategoryItem('SuperDeals'),
-                _buildCategoryItem('Merkato bussiness'),
-                _buildCategoryItem('Automotive'),
-                _buildCategoryItem('Appliances'),
-                _buildCategoryItem('Women\'s Clothing'),
-                _buildCategoryItem('Men\'s Clothing'),
-                _buildCategoryItem('Furniture'),
-              ],
+            child: BlocBuilder<ProductCubit, ProductState>(
+              builder: (context, state) {
+                final currentCategory = context.read<ProductCubit>().currentCategory;
+                return ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: [
+                    _buildCategoryItem('Choice', currentCategory),
+                    _buildCategoryItem('SuperDeals', currentCategory),
+                    _buildCategoryItem('Merkato bussiness', currentCategory),
+                    _buildCategoryItem('Automotive', currentCategory),
+                    _buildCategoryItem('Appliances', currentCategory),
+                    _buildCategoryItem('Women\'s Clothing', currentCategory),
+                    _buildCategoryItem('Men\'s Clothing', currentCategory),
+                  ],
+                );
+              }
             ),
           ),
         ),
@@ -193,15 +247,38 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: Center(
-                              // Wrap the Image in a Hero widget for the animation
-                              child: Hero(
-                                tag: 'product_image_${product.id}',
-                                child: Image.network(
-                                  product.image,
-                                  fit: BoxFit.contain,
+                            child: Stack(
+                              children: [
+                                Center(
+                                  // Wrap the Image in a Hero widget for the animation
+                                  child: Hero(
+                                    tag: 'product_image_${product.id}',
+                                    child: Image.network(
+                                      product.image,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Positioned(
+                                  top: -8,
+                                  right: -8,
+                                  child: BlocBuilder<FavoriteCubit, FavoriteState>(
+                                    builder: (context, favState) {
+                                      final isFav = context.read<FavoriteCubit>().isFavorite(product.id);
+                                      return IconButton(
+                                        icon: Icon(
+                                          isFav ? Icons.favorite : Icons.favorite_border, 
+                                          color: Colors.redAccent,
+                                          size: 20,
+                                        ),
+                                        onPressed: () {
+                                          context.read<FavoriteCubit>().toggleFavorite(product);
+                                        },
+                                      );
+                                    }
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -220,7 +297,7 @@ class _HomePageState extends State<HomePage> {
                                   return Text(
                                     context.read<CurrencyCubit>().formatPrice(product.price),
                                     style: const TextStyle(
-                                      color: Color(0xFFFFD700), // Gold
+                                      color: Colors.redAccent, // Gold
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -230,7 +307,7 @@ class _HomePageState extends State<HomePage> {
                               IconButton(
                                 icon: const Icon(
                                   Icons.add_shopping_cart,
-                                  color: Color(0xFFFFD700), // Gold
+                                  color: Colors.redAccent, // Gold
                                 ),
                                 onPressed: () {
                                   context.read<CartCubit>().addToCart(product);
@@ -258,16 +335,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCategoryItem(String title, {bool isGold = false}) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 24),
-      child: Center(
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: isGold ? FontWeight.bold : FontWeight.w500,
-            color: isGold ? const Color(0xFFFFD700) : Colors.white70,
+  Widget _buildCategoryItem(String title, String activeCategory) {
+    bool isRed = title == activeCategory;
+    return GestureDetector(
+      onTap: () {
+        context.read<ProductCubit>().setCategory(title);
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(right: 24),
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: isRed ? FontWeight.bold : FontWeight.w500,
+              color: isRed ? Colors.redAccent : Colors.white70,
+            ),
           ),
         ),
       ),

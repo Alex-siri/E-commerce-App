@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../cart/presentation/bloc/cart_cubit.dart';
 import '../../domain/entities/product.dart'; // Adjust this import path if your Product entity is elsewhere!
 import '../bloc/currency_cubit.dart';
+import '../../../favorites/presentation/bloc/favorite_cubit.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   final Product product;
@@ -14,9 +15,33 @@ class ProductDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(product.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color(0xFF1E1E1E),
+        foregroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          BlocBuilder<FavoriteCubit, FavoriteState>(
+            builder: (context, favState) {
+              final isFav = favState.items.any((p) => p.id == product.id);
+              return IconButton(
+                icon: Icon(
+                  isFav ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.redAccent,
+                ),
+                onPressed: () {
+                  context.read<FavoriteCubit>().toggleFavorite(product);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(isFav ? 'Removed from Favorites' : 'Added to Favorites'),
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
+      backgroundColor: const Color(0xFF121212),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +52,13 @@ class ProductDetailsPage extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 height: 300,
-                color: Colors.white,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                ),
                 padding: const EdgeInsets.all(20),
                 child: Image.network(product.image, fit: BoxFit.contain),
               ),
@@ -50,7 +81,7 @@ class ProductDetailsPage extends StatelessWidget {
                         builder: (context, currency) {
                           return Text(
                             context.read<CurrencyCubit>().formatPrice(product.price),
-                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.redAccent),
                           );
                         },
                       ),
@@ -59,12 +90,12 @@ class ProductDetailsPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   const Text(
                     'Description',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     product.description,
-                    style: const TextStyle(fontSize: 16, height: 1.5, color: Colors.black87),
+                    style: const TextStyle(fontSize: 16, height: 1.5, color: Colors.white70),
                   ),
                   const SizedBox(height: 32),
                   SizedBox(
@@ -84,8 +115,9 @@ class ProductDetailsPage extends StatelessWidget {
                       icon: const Icon(Icons.shopping_cart_checkout),
                       label: const Text('Add to Cart', style: TextStyle(fontSize: 18)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Colors.redAccent,
                         foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                     ),
                   ),

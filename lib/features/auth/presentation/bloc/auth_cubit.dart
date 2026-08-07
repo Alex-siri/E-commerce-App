@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/login_user.dart';
 import '../../domain/usecases/signup_user.dart';
 import '../../domain/usecases/update_profile_pic.dart';
+import '../../domain/usecases/update_profile.dart';
+import '../../domain/entities/user.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -9,12 +11,14 @@ class AuthCubit extends Cubit<AuthState> {
   final LoginUser loginUser;
   final SignUpUser signUpUser;
   final UpdateProfilePic updateProfilePic;
+  final UpdateProfile updateProfile;
 
   // We start the Cubit with the 'AuthInitial' state
   AuthCubit({
     required this.loginUser, 
     required this.signUpUser, 
-    required this.updateProfilePic
+    required this.updateProfilePic,
+    required this.updateProfile,
   }) : super(AuthInitial());
 
   // This is the function our UI will call when the login button is pressed
@@ -82,6 +86,15 @@ class AuthCubit extends Cubit<AuthState> {
       } catch (e) {
         // Just silently fail or show error
       }
+    }
+  }
+
+  Future<void> updateProfileDetails(User updatedUser) async {
+    try {
+      final user = await updateProfile(updatedUser);
+      emit(AuthAuthenticated(user));
+    } catch (e) {
+      emit(AuthError(e.toString()));
     }
   }
 }

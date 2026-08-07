@@ -6,11 +6,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Import our feature files
 import 'features/cart/presentation/bloc/cart_cubit.dart';
+import 'features/favorites/presentation/bloc/favorite_cubit.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/usecases/login_user.dart';
 import 'features/auth/domain/usecases/signup_user.dart';
 import 'features/auth/domain/usecases/update_profile_pic.dart';
+import 'features/auth/domain/usecases/update_profile.dart';
 import 'features/auth/presentation/bloc/auth_cubit.dart';
 import 'features/auth/presentation/pages/login_page.dart';
 
@@ -39,6 +41,7 @@ void main() async {
   final loginUserUseCase = LoginUser(authRepository);
   final signUpUserUseCase = SignUpUser(authRepository);
   final updateProfilePicUseCase = UpdateProfilePic(authRepository);
+  final updateProfileUseCase = UpdateProfile(authRepository);
 
   // 4. Wire up the Product "pipes" (Dependency Injection)
   final productRemoteDataSource = ProductRemoteDataSourceImpl(
@@ -55,6 +58,7 @@ void main() async {
       loginUser: loginUserUseCase,
       signUpUser: signUpUserUseCase,
       updateProfilePic: updateProfilePicUseCase,
+      updateProfile: updateProfileUseCase,
       getAllProducts: getAllProductsUseCase,
     ),
   );
@@ -64,6 +68,7 @@ class MyApp extends StatelessWidget {
   final LoginUser loginUser;
   final SignUpUser signUpUser;
   final UpdateProfilePic updateProfilePic;
+  final UpdateProfile updateProfile;
   final GetAllProducts getAllProducts;
 
   const MyApp({
@@ -71,6 +76,7 @@ class MyApp extends StatelessWidget {
     required this.loginUser,
     required this.signUpUser,
     required this.updateProfilePic,
+    required this.updateProfile,
     required this.getAllProducts,
   });
 
@@ -81,7 +87,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AuthCubit(
           loginUser: loginUser, 
           signUpUser: signUpUser, 
-          updateProfilePic: updateProfilePic
+          updateProfilePic: updateProfilePic,
+          updateProfile: updateProfile,
         )),
         BlocProvider(
           create: (context) => ProductCubit(getAllProducts: getAllProducts),
@@ -89,21 +96,23 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => CurrencyCubit()),
         // ADDED THE CART CUBIT HERE!
         BlocProvider(create: (context) => CartCubit()),
+        // Added FavoriteCubit for wishlists
+        BlocProvider(create: (context) => FavoriteCubit()),
       ],
       child: MaterialApp(
         title: 'Merkato shopping app',
         debugShowCheckedModeBanner: false,
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: const Color(0xFF121212),
-          primaryColor: const Color(0xFFFFD700),
+          primaryColor: Colors.redAccent,
           colorScheme: const ColorScheme.dark(
-            primary: Color(0xFFFFD700),
-            secondary: Color(0xFFFFD700),
+            primary: Colors.redAccent,
+            secondary: Colors.redAccent,
             surface: Color(0xFF1E1E1E),
           ),
           appBarTheme: const AppBarTheme(
             backgroundColor: Color(0xFF1A1A1A),
-            foregroundColor: Color(0xFFFFD700), // Gold text on AppBar
+            foregroundColor: Colors.redAccent, // Red text on AppBar
           ),
         ),
         home: const LoginPage(),

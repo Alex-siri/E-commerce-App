@@ -18,4 +18,5 @@ abstract class AuthRepository {
 
   // Update profile picture
   Future<User> updateProfilePic(String email, String profilePicPath);
+  Future<User> updateProfile(User updatedUser);
 }
