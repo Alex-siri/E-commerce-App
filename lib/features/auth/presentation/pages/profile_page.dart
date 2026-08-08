@@ -7,7 +7,7 @@ import '../bloc/auth_cubit.dart';
 import '../bloc/auth_state.dart';
 import 'login_page.dart';
 import 'edit_profile_page.dart';
-import '../../../../features/orders/presentation/pages/order_history_page.dart';
+import '../../../orders/presentation/pages/order_history_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

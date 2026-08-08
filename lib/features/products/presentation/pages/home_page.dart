@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:carousel_slider/carousel_slider.dart';
+
 import 'product_details_page.dart';
 
 // Product Imports
@@ -217,17 +219,23 @@ class _HomePageState extends State<HomePage> {
           } else if (state is ProductLoaded) {
             final products = state.products;
 
-            return GridView.builder(
-              padding: const EdgeInsets.all(10),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.65,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
+            return Column(
+              children: [
+                const SizedBox(height: 16),
+                _buildCarousel(),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(10),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.65,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      final product = products[index];
                 
                 // Wrap the Card in a GestureDetector to trigger navigation
                 return GestureDetector(
@@ -327,11 +335,84 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-            );
-          }
-          return const SizedBox.shrink();
-        },
+            ),
+           ),
+          ],
+         );
+        }
+        return const SizedBox.shrink();
+      },
+     ),
+    );
+  }
+
+  Widget _buildCarousel() {
+    final List<Map<String, String>> dummyBanners = [
+      {
+        'image': 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1000&auto=format&fit=crop',
+        'tag': 'NEW SEASON',
+        'title': 'Trending Fashion\nEvery Week',
+      },
+      {
+        'image': 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=1000&auto=format&fit=crop',
+        'tag': 'TECH DEALS',
+        'title': 'Upgrade Your\nWorkspace',
+      },
+      {
+        'image': 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1000&auto=format&fit=crop',
+        'tag': 'MEMBER EXCLUSIVE',
+        'title': 'Huge Discounts\non Bags',
+      },
+    ];
+
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: 180.0,
+        autoPlay: true,
+        autoPlayInterval: const Duration(seconds: 4),
+        enlargeCenterPage: true,
+        viewportFraction: 0.9,
       ),
+      items: dummyBanners.map((banner) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                image: DecorationImage(
+                  image: NetworkImage(banner['image']!),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.darken),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(banner['tag']!, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      banner['title']!,
+                      style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold, height: 1.2),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      }).toList(),
     );
   }
 
