@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Import our feature files
 import 'features/cart/presentation/bloc/cart_cubit.dart';
 import 'features/favorites/presentation/bloc/favorite_cubit.dart';
+import 'features/orders/presentation/bloc/order_cubit.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/usecases/login_user.dart';
@@ -98,9 +99,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => CartCubit()),
         // Added FavoriteCubit for wishlists
         BlocProvider(create: (context) => FavoriteCubit()),
+        // Added OrderCubit for order history
+        BlocProvider(create: (context) => OrderCubit()),
       ],
       child: MaterialApp(
-        title: 'Merkato shopping app',
+        title: 'Merkato Store',
         debugShowCheckedModeBanner: false,
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: const Color(0xFF121212),

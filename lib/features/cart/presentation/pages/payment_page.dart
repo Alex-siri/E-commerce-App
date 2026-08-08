@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/cart_cubit.dart';
 import '../../../../features/products/presentation/pages/home_page.dart';
+import '../../../../features/orders/presentation/bloc/order_cubit.dart';
+import '../../../../features/orders/domain/entities/order.dart';
 
 class PaymentPage extends StatefulWidget {
   final String totalAmount;
@@ -26,7 +28,17 @@ class _PaymentPageState extends State<PaymentPage> {
 
     if (!mounted) return;
 
-    // Clear the cart securely (We will need to add clearCart to CartCubit)
+    // Create Order Record before clearing Cart
+    final cartItems = context.read<CartCubit>().state.items;
+    final newOrder = OrderEntity(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      date: DateTime.now(),
+      items: List.from(cartItems),
+      totalAmount: widget.totalAmount,
+    );
+    context.read<OrderCubit>().addOrder(newOrder);
+
+    // Clear the cart securely
     context.read<CartCubit>().clearCart();
 
     ScaffoldMessenger.of(context).showSnackBar(

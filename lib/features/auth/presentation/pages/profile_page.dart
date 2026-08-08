@@ -7,6 +7,7 @@ import '../bloc/auth_cubit.dart';
 import '../bloc/auth_state.dart';
 import 'login_page.dart';
 import 'edit_profile_page.dart';
+import '../../../../features/orders/presentation/pages/order_history_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -114,6 +115,32 @@ class ProfilePage extends StatelessWidget {
                       _buildInfoCard(Icons.phone_outlined, 'Phone Number', user.phoneNumber!),
                       const SizedBox(height: 16),
                     ],
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 55,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white10,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const OrderHistoryPage()),
+                            );
+                          },
+                          icon: const Icon(Icons.receipt_long_outlined),
+                          label: const Text(
+                            'Order History',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
                         height: 55,
@@ -133,7 +160,7 @@ class ProfilePage extends StatelessWidget {
                           },
                           icon: const Icon(Icons.edit),
                           label: const Text(
-                            'EDIT PROFILE',
+                            'Edit Profile',
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
