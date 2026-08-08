@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
                             child: Text(
-                              _isLoginMode ? 'Welcome Back 👋' : 'Create Account ✨',
+                              _isLoginMode ? 'Welcome Back' : 'Create Account',
                               key: ValueKey<bool>(_isLoginMode),
                               style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
                               textAlign: TextAlign.center,
@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
                             child: Text(
-                              _isLoginMode ? 'Sign in to access your Fake Store' : 'Join the Fake Store today',
+                              _isLoginMode ? 'Sign in to access your Merkato Store' : 'Join the Merkato Store today',
                               key: ValueKey<bool>(_isLoginMode),
                               style: const TextStyle(color: Colors.white70, fontSize: 16),
                               textAlign: TextAlign.center,
